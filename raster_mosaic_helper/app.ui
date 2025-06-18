@@ -19,7 +19,7 @@
      <item>
       <widget class="QCheckBox" name="chk_select_all">
        <property name="text">
-        <string>Select All</string>
+        <string>Select Allz</string>
        </property>
       </widget>
      </item>
