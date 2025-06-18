@@ -1,0 +1,7 @@
+[general]
+name=Raster Mosaic Helper
+qgisMinimumVersion=3.0
+description=Generates TXT path for SAGA mosaicking and copies on the clipboard
+version=1.0
+author=EOMAP
+email=it@eomap.de
