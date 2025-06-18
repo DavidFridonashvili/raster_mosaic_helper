@@ -1,0 +1,42 @@
+name: Deploy Plugin to QGIS Repo
+
+on:
+  push:
+    tags:
+      - 'v*'     # trigger only on version tags like v1.0.1
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout plugin code
+        uses: actions/checkout@v3
+
+      - name: Zip plugin folder
+        run: |
+          mkdir build
+          zip -r build/raster_mosaic_helper.zip raster_mosaic_helper
+
+      - name: Checkout central plugin repo
+        uses: actions/checkout@v3
+        with:
+          repository: DavidFridonashvili/qgis-plugins-repo
+          token: ${{ secrets.PLUGIN_REPO_TOKEN }}
+          path: qgis-plugins-repo
+
+      - name: Copy zip and metadata.txt
+        run: |
+          mkdir -p qgis-plugins-repo/raster_mosaic_helper
+          cp build/raster_mosaic_helper.zip qgis-plugins-repo/raster_mosaic_helper/
+          cp raster_mosaic_helper/metadata.txt qgis-plugins-repo/raster_mosaic_helper/
+
+      - name: Commit & push to plugin repo
+        run: |
+          cd qgis-plugins-repo
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add raster_mosaic_helper
+          git commit -m "Update raster_mosaic_helper via CI"
+          git push
